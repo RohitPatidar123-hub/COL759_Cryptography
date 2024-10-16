@@ -10,9 +10,9 @@
        mpz_init_set_si(c,-1234);
 
        mpz_init_set_d(d,1234.3333);
-       if(mpz_init_set_str(e,"4000000000000",10)==0)
+       if(mpz_init_set_str(e,"1000000000000000001000048000000000000000007000287",10)==0)
           {
-                 std ::cout<<"Successfully set value of e to 4000000000000000\n \n \n";
+                 std ::cout<<"Successfully set value of e to 1000000000000000001000048000000000000000007000287\n \n \n";
           }
         else {
                   printf("error occur \n \n");
