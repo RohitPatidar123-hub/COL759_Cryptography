@@ -1,94 +1,259 @@
 #include <algorithm>
 #include <cmath>
-#include <gmp.h>
+#include <gmpxx.h>
 #include <iostream>
 #include <mpi.h>
 #include <vector>
 
+// Function to generate all prime numbers up to 'limit' using Sieve of
+// Eratosthenes
+std::vector<int> generatePrimes(int limit) {
+  std::vector<bool> is_prime(limit + 1, true);
+  is_prime[0] = is_prime[1] = false;
 
+  int sqrt_limit = static_cast<int>(std::sqrt(limit));
+  for (int p = 2; p <= sqrt_limit; ++p) {
+    if (is_prime[p]) {
+      for (int multiple = p * p; multiple <= limit; multiple += p) {
+        is_prime[multiple] = false;
+      }
+    }
+  }
 
+  std::vector<int> primes;
+  for (int p = 2; p <= limit; ++p) {
+    if (is_prime[p]) {
+      primes.push_back(p);
+    }
+  }
+  return primes;
+}
 
+// Function to compute the Legendre symbol (a/p) using GMP
+// Returns 1 if 'a' is a quadratic residue modulo 'p'
+// Returns -1 if 'a' is a non-residue modulo 'p'
+// Returns 0 if 'p' divides 'a'
+int legendreSymbol(mpz_class n, int p) {
+   mpz_t a; 
+  mpz_init_set(a, n.get_mpz_t());
+  if (mpz_divisible_ui_p(a, p)) {
+    return 0;
+  }
+  // Compute a^((p-1)/2) mod p
+  mpz_t exponent, result, mod;
+  mpz_inits(exponent, result, mod, NULL);
 
+  mpz_set_ui(mod, p);
+  mpz_set_ui(exponent, (p - 1) / 2);
+  mpz_powm(result, a, exponent, mod);
 
+  // Convert result to integer
+  unsigned long res = mpz_get_ui(result);
+  mpz_clears(exponent, result, mod, NULL);
 
+  if (res == 1) {
+    return 1;
+  } else {
+    return -1;
+  }
+}
 
+// Function to compute Q(x) = (x + m)^2 - n
+mpz_class compute_Qx(int a, mpz_class m, mpz_class n) { 
+            mpz_class x=a;
+            return (x + m) * (x + m) - n; 
+            
+     }
+
+ mpz_class multiplyByUInt(mpz_class a, unsigned int multiplier) {
+    mpz_class result;
+    mpz_mul_ui(result.get_mpz_t(), a.get_mpz_t(), multiplier);
+    return result;
+}    
+
+// Function to factorize Q(x) over the Factor Base
+// Returns a vector of exponents (including -1) if Q(x) is smooth; otherwise,
+// returns an empty vector
+std::vector<int> factorize_Qx(int Qx, const std::vector<int> &factor_base) {
+  std::vector<int> exponents(factor_base.size(), 0);
+  int original_Qx = Qx;
+
+  if (Qx < 0) {
+    exponents[0] = 1; // Exponent of -1 is 1
+    Qx = -Qx;
+  }
+
+  for (size_t i = 1; i < factor_base.size(); ++i) {
+    int p = factor_base[i];
+    while (Qx % p == 0) {
+      exponents[i]++;
+      Qx /= p;
+    }
+  }
+
+  if (Qx == 1) { // Successfully factorized over Factor Base
+    return exponents;
+  } else {
+    return {}; // Not smooth
+  }
+}
+
+// Function to print the exponent matrix
+void printMatrix(const std::vector<std::vector<int>> &matrix,
+                 const std::vector<int> &factor_base) {
+  std::cout << "Exponent Matrix (mod 2):\n";
+  // Header
+  std::cout << "Row\t";
+  for (const auto &p : factor_base) {
+    std::cout << p << "\t";
+  }
+  std::cout << "\n";
+
+  // Rows
+  for (size_t i = 0; i < matrix.size(); ++i) {
+    std::cout << i + 1 << "\t";
+    for (const auto &val : matrix[i]) {
+      std::cout << val % 2 << "\t";
+    }
+    std::cout << "\n";
+  }
+  std::cout << "\n";
+}
+
+// Function to perform Gaussian Elimination over GF(2) and find dependencies
+std::vector<std::vector<int>>
+findDependencies(std::vector<std::vector<int>> matrix_mod2) {
+  int num_rows = matrix_mod2.size();
+  if (num_rows == 0)
+    return {};
+
+  int num_cols = matrix_mod2[0].size();
+  std::vector<int> pivot_col(num_cols, -1);
+  // Initialize an identity matrix to track dependencies
+  std::vector<std::vector<int>> identity(num_rows,
+                                         std::vector<int>(num_rows, 0));
+  for (int i = 0; i < num_rows; ++i) {
+    identity[i][i] = 1;
+  }
+
+  // Perform Gaussian elimination
+  for (int col = 0; col < num_cols; ++col) {
+    // Find a pivot row
+    int pivot_row = -1;
+    for (int row = col; row < num_rows; ++row) {
+      if (matrix_mod2[row][col] == 1) {
+        pivot_row = row;
+        break;
+      }
+    }
+
+    if (pivot_row == -1) {
+      continue; // No pivot in this column
+    }
+
+    // Swap current row with pivot_row if necessary
+    if (pivot_row != col) {
+      std::swap(matrix_mod2[col], matrix_mod2[pivot_row]);
+      std::swap(identity[col], identity[pivot_row]);
+    }
+
+    pivot_col[col] = col;
+
+    // Eliminate all other 1's in this column
+    for (int row = 0; row < num_rows; ++row) {
+      if (row != col && matrix_mod2[row][col] == 1) {
+        for (int c = 0; c < num_cols; ++c) {
+          matrix_mod2[row][c] ^= matrix_mod2[col][c];
+        }
+        for (int c = 0; c < num_rows; ++c) {
+          identity[row][c] ^= identity[col][c];
+        }
+      }
+    }
+  }
+
+  // Identify dependencies (nullspace vectors)
+  std::vector<std::vector<int>> dependencies;
+
+  // Rows without a pivot correspond to dependencies
+  for (int row = 0; row < num_rows; ++row) {
+    bool is_zero = true;
+    for (int col = 0; col < num_cols; ++col) {
+      if (matrix_mod2[row][col] != 0) {
+        is_zero = false;
+        break;
+      }
+    }
+    if (is_zero) {
+      // The corresponding row in the identity matrix represents the dependency
+      dependencies.push_back(identity[row]);
+    }
+  }
+
+  return dependencies;
+}
 
 int main(int argc, char *argv[]) {
-  // Initialize MPI environment
-  MPI_Init(&argc, &argv);
-  char str[] = "1000000000000000001000048000000000000000007000287";
-  int root_process = 0;
-  
+   // Initialize MPI environment
+    MPI_Init(&argc, &argv);
 
-  int world_size; // Number of processes
-  MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+    int world_size; // Number of processes
+    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
-  int world_rank; // Rank of the current process
-  MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+    int world_rank; // Rank of the current process
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
 
-  
-//   const int n = 1828844741;                               // Define the target number 'n' and compute 'm'
-//   const int m = static_cast<int>(std::ceil(std::sqrt(n)));
-    mpz_t n ,m;     //declare int type variable in gmp to store large value n is for composite m is to store square root 
-    char* n_str;
-    char* m_str;
-    int n_len, m_len;  // For storing string lengths
-    mpz_init(m);
-    if(mpz_init_set_str(n,str,10)==0)
-          {
-                 std ::cout<<"Successfully set value of n \n \n \n";
-          }
-        else {
-                  printf("Error occur while initializing value of n \n \n");
-                  return -1 ;
-             }
-  
-    //const int m = static_cast<int>(std::ceil(std::sqrt(n)));
-    mpz_sqrt(m,n);      //square root of a number , assign ceiling value 
+    // Define the target number 'n' and compute 'm'
+    mpz_class n, m;
+    std::string n_str, m_str;
+    int n_len, m_len;
+    int root_process = 0;
 
- 
-//   MPI_Bcast(const_cast<int *>(&n), 1, MPI_INT, 0, MPI_COMM_WORLD);   // Broadcast 'n' and 'm' to all processes
-//   MPI_Bcast(const_cast<int *>(&m), 1, MPI_INT, 0, MPI_COMM_WORLD);
+    if (world_rank == root_process) {
+        n = 1828844741;                // Assign number to n
+        m = sqrt(n);                   // Compute square root of n
 
-     if (world_rank==0) {
-       n_str = mpz_get_str(NULL, 10, n);                // Convert mpz_t values to strings
-       m_str = mpz_get_str(NULL, 10, m);
+        n_str = n.get_str();           // Convert mpz_class to string
+        m_str = m.get_str();           // Convert mpz_class to string
 
-       n_len = strlen(n_str) + 1;                       //Get string lengths , +1 for the null terminator
-       m_len = strlen(m_str) + 1;
-    }
- 
-    MPI_Bcast(&n_len, 1, MPI_INT, root_process, MPI_COMM_WORLD);    // Broadcast the lengths of the strings first
-    MPI_Bcast(&m_len, 1, MPI_INT, root_process, MPI_COMM_WORLD); 
-
-
-    if (rank != root_process) {                                  // Allocate memory for strings on non-root processes
-        n_str = new char[n_len];
-        m_str = new char[m_len];
+        n_len = n_str.size() + 1;      // Get string lengths (+1 for null terminator)
+        m_len = m_str.size() + 1;
     }
 
+    // Broadcast the lengths of the strings first
+    MPI_Bcast(&n_len, 1, MPI_INT, root_process, MPI_COMM_WORLD);
+    MPI_Bcast(&m_len, 1, MPI_INT, root_process, MPI_COMM_WORLD);
 
-    MPI_Bcast(n_str, n_len, MPI_CHAR, root_process, MPI_COMM_WORLD);   // Broadcast the actual strings
-    MPI_Bcast(m_str, m_len, MPI_CHAR, root_process, MPI_COMM_WORLD);  
+    // Allocate memory for strings on non-root processes
+    if (world_rank != root_process) {
+        n_str.resize(n_len);
+        m_str.resize(m_len);
+    }
+
+    // Broadcast the actual string data
+    MPI_Bcast(&n_str[0], n_len, MPI_CHAR, root_process, MPI_COMM_WORLD);
+    MPI_Bcast(&m_str[0], m_len, MPI_CHAR, root_process, MPI_COMM_WORLD);
+
+    // Convert strings back to mpz_class on non-root processes
+    if (world_rank != root_process) {
+        n.set_str(n_str, 10);
+        m.set_str(m_str, 10);
+    }
+
+    // Print the values to verify the broadcast
+    std::cout << "Process " << world_rank << ": n = " << n << ", m = " << m << std::endl; 
 
   std::vector<int> factor_base_primes; // Primes where (n/p) = 1
   std::vector<int> factor_base;        // Including -1
 
-  if(world_rank!=0){
-      mpz_set_str(n, n_str, 10);
-      mpz_set_str(m, m_str, 10);
-
-  }
   if (world_rank == 0) {
     std::cout << "Quadratic Sieve (QS) Implementation\n";
     std::cout << "===================================\n";
-    // std::cout << "Target number (n): " << n << std::endl;
-    // std::cout << "Computed m (ceil(sqrt(n))): " << m << "\n" << std::endl;
-    gmp_printf("Target number (n): %Zd ",n);
-    gmp_printf("Computed m (ceil(sqrt(n))): %Zd",m);
+    std::cout << "Target number (n): " << n << std::endl;
+    std::cout << "Computed m (ceil(sqrt(n))): " << m << "\n" << std::endl;
 
     // Step 1: Generate primes up to 'm'
-    std::vector<int> primes = generatePrimes(m);
+    std::vector<int> primes = generatePrimes(50000);
 
     // Step 2: Exclude primes that divide 'n'
     std::vector<int> primes_filtered;
@@ -99,9 +264,8 @@ int main(int argc, char *argv[]) {
     }
 
     // Initialize GMP variable for 'n'
-    mpz_t mpz_n;
-    mpz_init(mpz_n);
-    mpz_set_ui(mpz_n, n);
+    mpz_class mpz_n=n_len;
+    
 
     std::cout << "Primes up to " << m << ":\n";
     for (const auto &p : primes) {
@@ -129,8 +293,6 @@ int main(int argc, char *argv[]) {
                   << std::endl;
       }
     }
-
-    mpz_clear(mpz_n);
 
     // Step 4: Construct the Factor Base by adding -1
     factor_base.push_back(-1); // Always include -1
@@ -196,11 +358,11 @@ int main(int argc, char *argv[]) {
   }
 
   // Each process computes Q(x) for its assigned x's
-  std::vector<int> local_Qx;
+  std::vector<mpz_class> local_Qx;
   std::vector<int> local_x;
 
   for (int x = local_x_start; x <= local_x_end; ++x) {
-    int Qx = compute_Qx(x, m, n);
+    mpz_class Qx = compute_Qx(x, m, n);
     local_Qx.push_back(Qx);
     local_x.push_back(x);
   }
@@ -344,8 +506,9 @@ int main(int argc, char *argv[]) {
       std::cout << "Attempting to find factors using dependencies...\n"
                 << std::endl;
 
-      mpz_t mpz_n;
-      mpz_init_set_ui(mpz_n, n);
+    mpz_t mpz_n;             // Declare the mpz_t variable
+    mpz_init(mpz_n);         // Initialize it
+    mpz_set(mpz_n, n.get_mpz_t()); // Set its value from mpz_class
 
       for (size_t i = 0; i < dependencies.size(); ++i) {
         // Initialize 'a' and 'b'
@@ -360,9 +523,11 @@ int main(int argc, char *argv[]) {
         // Multiply corresponding x + m for 'a' and collect exponents for 'b'
         for (size_t j = 0; j < dependencies[i].size(); ++j) {
           if (dependencies[i][j] == 1) {
-            int x = smooth_x[j];
-            int x_plus_m = x + m;
-            mpz_mul_ui(a, a, x_plus_m);
+            mpz_class x = smooth_x[j];
+            mpz_class x_plus_m = x + m;
+            //mpz_mul_ui(a, a, x_plus_m);
+            mpz_class a = 1; // Example initialization of a
+            a = multiplyByUInt(a, x_plus_m.get_ui());
 
             // Sum exponents
             for (size_t k = 0; k < factor_base.size(); ++k) {
