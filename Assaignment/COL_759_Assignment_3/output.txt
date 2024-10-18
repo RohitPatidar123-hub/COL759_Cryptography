@@ -1,0 +1,709 @@
+Process 1: n = 1001, m = 32
+Process 2: n = 1001, m = 32
+Process 0: n = 1001, m = 32
+Quadratic Sieve (QS) Implementation
+===================================
+Target number (n): 1001
+Computed m (ceil(sqrt(n))): 32
+
+Primes up to 32:
+2 3 5 7 11 13 17 19 23 29 31 
+
+Primes after excluding those that divide 1001:
+2 3 5 17 19 23 29 31 
+
+Legendre symbol (1001/2) = 1
+2 is a quadratic residue modulo 2. Included in Factor Base.
+
+Legendre symbol (1001/3) = -1
+3 is NOT a quadratic residue modulo 3. Excluded from Factor Base.
+
+Legendre symbol (1001/5) = 1
+5 is a quadratic residue modulo 5. Included in Factor Base.
+
+Legendre symbol (1001/17) = 1
+17 is a quadratic residue modulo 17. Included in Factor Base.
+
+Legendre symbol (1001/19) = -1
+19 is NOT a quadratic residue modulo 19. Excluded from Factor Base.
+
+Legendre symbol (1001/23) = 1
+23 is a quadratic residue modulo 23. Included in Factor Base.
+
+Legendre symbol (1001/29) = -1
+29 is NOT a quadratic residue modulo 29. Excluded from Factor Base.
+
+Legendre symbol (1001/31) = 1
+31 is a quadratic residue modulo 31. Included in Factor Base.
+
+Process 3: n = 1001, m = 32
+Final Factor Base (including -1):
+-1 2 5 17 23 31 
+
+Process 4: n = 1001, m = 32
+world rank :4local_x_start :52local_x_end63Qx : 6055  ,Qx : 6224  ,Qx : 6395  ,Qx : 6568  ,Qx : 6743  ,Qx : 6920  ,Qx : 7099  ,Qx : 7280  ,Qx : 7463  ,Qx : 7648  ,Qx : 7835  ,Qx : 8024  ,
+Process 5: n = 1001, m = 32
+world rank :5local_x_start :64local_x_end75Qx : 8215  ,Qx : 8408  ,Qx : 8603  ,Qx : 8800  ,Qx : 8999  ,Qx : 9200  ,Qx : 9403  ,Qx : 9608  ,Qx : 9815  ,Qx : 10024  ,Qx : 10235  ,Qx : 10448  ,
+
+Process 6: n = 1001, m = 32
+world rank :6local_x_start :76local_x_end87Qx : 10663  ,Qx : 10880  ,Qx : 11099  ,Qx : 11320  ,Qx : 11543  ,Qx : 11768  ,Qx : 11995  ,Qx : 12224  ,Qx : 12455  ,Qx : 12688  ,Qx : 12923  ,Qx : 13160  ,
+
+Process 7: n = 1001, m = 32
+world rank :7local_x_start :88local_x_end99Qx : 13399  ,Qx : 13640  ,Qx : 13883  ,Qx : 14128  ,Qx : 14375  ,Qx : 14624  ,Qx : 14875  ,Qx : 15128  ,Qx : 15383  ,Qx : 15640  ,Qx : 15899  ,Qx : 16160  ,
+
+world rank :1local_x_start :13local_x_end25Qx : 1024  ,Qx : 1115  ,Qx : 1208  ,Qx : 1303  ,Qx : 1400  ,Qx : 1499  ,Qx : 1600  ,Qx : 1703  ,Qx : 1808  ,Qx : 1915  ,Qx : 2024  ,Qx : 2135  ,Qx : 2248  ,
+
+world rank :3local_x_start :39local_x_end51Qx : 4040  ,Qx : 4183  ,Qx : 4328  ,Qx : 4475  ,Qx : 4624  ,Qx : 4775  ,Qx : 4928  ,Qx : 5083  ,Qx : 5240  ,Qx : 5399  ,Qx : 5560  ,Qx : 5723  ,Qx : 5888  ,
+
+world rank :2local_x_start :26local_x_end38Qx : 2363  ,Qx : 2480  ,Qx : 2599  ,Qx : 2720  ,Qx : 2843  ,Qx : 2968  ,Qx : 3095  ,Qx : 3224  ,Qx : 3355  ,Qx : 3488  ,Qx : 3623  ,Qx : 3760  ,Qx : 3899  ,
+
+
+world rank :0local_x_start :0local_x_end12Qx : 23  ,Qx : 88  ,Qx : 155  ,Qx : 224  ,Qx : 295  ,Qx : 368  ,Qx : 443  ,Qx : 520  ,Qx : 599  ,Qx : 680  ,Qx : 763  ,Qx : 848  ,Qx : 935  ,
+
+ displs[1] = 1313  displs[2] = 2613  displs[3] = 3913  displs[4] = 5212  displs[5] = 6412  displs[6] = 7612  displs[7] = 8812 Final Q(x) Array:
+Q(0) = 1
+Q(1) = 1
+Q(2) = 1186091216
+Q(3) = 1
+Q(4) = 1
+Q(5) = 1
+Q(6) = 1186099344
+Q(7) = 1
+Q(8) = 1
+Q(9) = 1
+Q(10) = 1186099360
+Q(11) = 1
+Q(12) = 1
+Q(13) = 1
+Q(14) = 1
+Q(15) = 1278375680
+Q(16) = 1
+Q(17) = 1
+Q(18) = 1
+Q(19) = 1278381472
+Q(20) = 1
+Q(21) = 1
+Q(22) = 1
+Q(23) = 1278381728
+Q(24) = 1
+Q(25) = 1
+Q(26) = 1
+Q(27) = 1
+Q(28) = 876867088
+Q(29) = 1
+Q(30) = 1
+Q(31) = 1
+Q(32) = 876871376
+Q(33) = 1
+Q(34) = 1
+Q(35) = 1
+Q(36) = 876871392
+Q(37) = 1
+Q(38) = 1
+Q(39) = 1
+Q(40) = 1
+Q(41) = 1273090832
+Q(42) = 1
+Q(43) = 1
+Q(44) = 1
+Q(45) = 1273090960
+Q(46) = 1
+Q(47) = 1
+Q(48) = 1
+Q(49) = 1273090992
+Q(50) = 1
+Q(51) = 1
+Q(52) = 1
+Q(53) = 1
+Q(54) = 1195517664
+Q(55) = 1
+Q(56) = 1
+Q(57) = 1
+Q(58) = 1195525200
+Q(59) = 1
+Q(60) = 1
+Q(61) = 1
+Q(62) = 1195525696
+Q(63) = 1
+Q(64) = 1
+Q(65) = 1
+Q(66) = 1455440416
+Q(67) = 1
+Q(68) = 1
+Q(69) = 1
+Q(70) = 1455440512
+Q(71) = 1
+Q(72) = 1
+Q(73) = 1
+Q(74) = 1455440528
+Q(75) = 1
+Q(76) = 1
+Q(77) = 1
+Q(78) = 534791536
+Q(79) = 1
+Q(80) = 1
+Q(81) = 1
+Q(82) = 534792432
+Q(83) = 1
+Q(84) = 1
+Q(85) = 1
+Q(86) = 534792448
+Q(87) = 1
+Q(88) = 1
+Q(89) = 1
+Q(90) = 1552966864
+Q(91) = 1
+Q(92) = 1
+Q(93) = 1
+Q(94) = 1552967296
+Q(95) = 1
+Q(96) = 1
+Q(97) = 1
+Q(98) = 1552967328
+Q(99) = 1
+
+Factoring Q(x) over the Factor Base and identifying smooth relations...
+
+Q(0) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(1) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(2) = 1186091216 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(3) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(4) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(5) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(6) = 1186099344 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(7) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(8) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(9) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(10) = 1186099360 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(11) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(12) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(13) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(14) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(15) = 1278375680 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(16) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(17) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(18) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(19) = 1278381472 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(20) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(21) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(22) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(23) = 1278381728 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(24) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(25) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(26) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(27) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(28) = 876867088 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(29) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(30) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(31) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(32) = 876871376 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(33) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(34) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(35) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(36) = 876871392 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(37) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(38) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(39) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(40) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(41) = 1273090832 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(42) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(43) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(44) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(45) = 1273090960 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(46) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(47) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(48) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(49) = 1273090992 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(50) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(51) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(52) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(53) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(54) = 1195517664 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(55) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(56) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(57) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(58) = 1195525200 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(59) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(60) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(61) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(62) = 1195525696 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(63) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(64) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(65) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(66) = 1455440416 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(67) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(68) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(69) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(70) = 1455440512 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(71) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(72) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(73) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(74) = 1455440528 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(75) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(76) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(77) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(78) = 534791536 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(79) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(80) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(81) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(82) = 534792432 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(83) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(84) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(85) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(86) = 534792448 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(87) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(88) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(89) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(90) = 1552966864 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(91) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(92) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(93) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(94) = 1552967296 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(95) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(96) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(97) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Q(98) = 1552967328 is NOT smooth over the Factor Base.
+Discarding this relation.
+
+Q(99) = 1 is smooth over the Factor Base.
+Exponents: 0 0 0 0 0 0 
+Exponents (mod 2): 0 0 0 0 0 0 
+
+Total smooth relations found: 76
+
+Constructing the Exponent Matrix...
+
+Exponent Matrix (mod 2):
+Row	-1	2	5	17	23	31	
+1	0	0	0	0	0	0	
+2	0	0	0	0	0	0	
+3	0	0	0	0	0	0	
+4	0	0	0	0	0	0	
+5	0	0	0	0	0	0	
+6	0	0	0	0	0	0	
+7	0	0	0	0	0	0	
+8	0	0	0	0	0	0	
+9	0	0	0	0	0	0	
+10	0	0	0	0	0	0	
+11	0	0	0	0	0	0	
+12	0	0	0	0	0	0	
+13	0	0	0	0	0	0	
+14	0	0	0	0	0	0	
+15	0	0	0	0	0	0	
+16	0	0	0	0	0	0	
+17	0	0	0	0	0	0	
+18	0	0	0	0	0	0	
+19	0	0	0	0	0	0	
+20	0	0	0	0	0	0	
+21	0	0	0	0	0	0	
+22	0	0	0	0	0	0	
+23	0	0	0	0	0	0	
+24	0	0	0	0	0	0	
+25	0	0	0	0	0	0	
+26	0	0	0	0	0	0	
+27	0	0	0	0	0	0	
+28	0	0	0	0	0	0	
+29	0	0	0	0	0	0	
+30	0	0	0	0	0	0	
+31	0	0	0	0	0	0	
+32	0	0	0	0	0	0	
+33	0	0	0	0	0	0	
+34	0	0	0	0	0	0	
+35	0	0	0	0	0	0	
+36	0	0	0	0	0	0	
+37	0	0	0	0	0	0	
+38	0	0	0	0	0	0	
+39	0	0	0	0	0	0	
+40	0	0	0	0	0	0	
+41	0	0	0	0	0	0	
+42	0	0	0	0	0	0	
+43	0	0	0	0	0	0	
+44	0	0	0	0	0	0	
+45	0	0	0	0	0	0	
+46	0	0	0	0	0	0	
+47	0	0	0	0	0	0	
+48	0	0	0	0	0	0	
+49	0	0	0	0	0	0	
+50	0	0	0	0	0	0	
+51	0	0	0	0	0	0	
+52	0	0	0	0	0	0	
+53	0	0	0	0	0	0	
+54	0	0	0	0	0	0	
+55	0	0	0	0	0	0	
+56	0	0	0	0	0	0	
+57	0	0	0	0	0	0	
+58	0	0	0	0	0	0	
+59	0	0	0	0	0	0	
+60	0	0	0	0	0	0	
+61	0	0	0	0	0	0	
+62	0	0	0	0	0	0	
+63	0	0	0	0	0	0	
+64	0	0	0	0	0	0	
+65	0	0	0	0	0	0	
+66	0	0	0	0	0	0	
+67	0	0	0	0	0	0	
+68	0	0	0	0	0	0	
+69	0	0	0	0	0	0	
+70	0	0	0	0	0	0	
+71	0	0	0	0	0	0	
+72	0	0	0	0	0	0	
+73	0	0	0	0	0	0	
+74	0	0	0	0	0	0	
+75	0	0	0	0	0	0	
+76	0	0	0	0	0	0	
+
+Performing Gaussian Elimination over GF(2) to find dependencies...
+
+Dependencies Found:
+Dependency 1: Relation 1 
+Dependency 2: Relation 2 
+Dependency 3: Relation 3 
+Dependency 4: Relation 4 
+Dependency 5: Relation 5 
+Dependency 6: Relation 6 
+Dependency 7: Relation 7 
+Dependency 8: Relation 8 
+Dependency 9: Relation 9 
+Dependency 10: Relation 10 
+Dependency 11: Relation 11 
+Dependency 12: Relation 12 
+Dependency 13: Relation 13 
+Dependency 14: Relation 14 
+Dependency 15: Relation 15 
+Dependency 16: Relation 16 
+Dependency 17: Relation 17 
+Dependency 18: Relation 18 
+Dependency 19: Relation 19 
+Dependency 20: Relation 20 
+Dependency 21: Relation 21 
+Dependency 22: Relation 22 
+Dependency 23: Relation 23 
+Dependency 24: Relation 24 
+Dependency 25: Relation 25 
+Dependency 26: Relation 26 
+Dependency 27: Relation 27 
+Dependency 28: Relation 28 
+Dependency 29: Relation 29 
+Dependency 30: Relation 30 
+Dependency 31: Relation 31 
+Dependency 32: Relation 32 
+Dependency 33: Relation 33 
+Dependency 34: Relation 34 
+Dependency 35: Relation 35 
+Dependency 36: Relation 36 
+Dependency 37: Relation 37 
+Dependency 38: Relation 38 
+Dependency 39: Relation 39 
+Dependency 40: Relation 40 
+Dependency 41: Relation 41 
+Dependency 42: Relation 42 
+Dependency 43: Relation 43 
+Dependency 44: Relation 44 
+Dependency 45: Relation 45 
+Dependency 46: Relation 46 
+Dependency 47: Relation 47 
+Dependency 48: Relation 48 
+Dependency 49: Relation 49 
+Dependency 50: Relation 50 
+Dependency 51: Relation 51 
+Dependency 52: Relation 52 
+Dependency 53: Relation 53 
+Dependency 54: Relation 54 
+Dependency 55: Relation 55 
+Dependency 56: Relation 56 
+Dependency 57: Relation 57 
+Dependency 58: Relation 58 
+Dependency 59: Relation 59 
+Dependency 60: Relation 60 
+Dependency 61: Relation 61 
+Dependency 62: Relation 62 
+Dependency 63: Relation 63 
+Dependency 64: Relation 64 
+Dependency 65: Relation 65 
+Dependency 66: Relation 66 
+Dependency 67: Relation 67 
+Dependency 68: Relation 68 
+Dependency 69: Relation 69 
+Dependency 70: Relation 70 
+Dependency 71: Relation 71 
+Dependency 72: Relation 72 
+Dependency 73: Relation 73 
+Dependency 74: Relation 74 
+Dependency 75: Relation 75 
+Dependency 76: Relation 76 
+
+Attempting to find factors using dependencies...
+
+No non-trivial factors found with the current dependencies.
+

@@ -59,9 +59,10 @@ int legendreSymbol(mpz_class n, int p) {
 }
 
 // Function to compute Q(x) = (x + m)^2 - n
-mpz_class compute_Qx(int a, mpz_class m, mpz_class n) { 
+void compute_Qx(mpz_class &result,int a, mpz_class m, mpz_class n) { 
             mpz_class x=a;
-            return (x + m) * (x + m) - n; 
+            result = (x + m) * (x + m) - n; 
+           // std::cout<<"Qx : "<<result<<"  ,";
             
      }
 
@@ -210,8 +211,8 @@ int main(int argc, char *argv[]) {
     int root_process = 0;
 
     if (world_rank == root_process) {
-        n = 1828844741;                // Assign number to n
-        m = sqrt(n);                   // Compute square root of n
+        n.set_str("1001", 10);                // Assign number to n
+        m = sqrt(n) +1;                   // Compute square root of n
 
         n_str = n.get_str();           // Convert mpz_class to string
         m_str = m.get_str();           // Convert mpz_class to string
@@ -253,7 +254,13 @@ int main(int argc, char *argv[]) {
     std::cout << "Computed m (ceil(sqrt(n))): " << m << "\n" << std::endl;
 
     // Step 1: Generate primes up to 'm'
-    std::vector<int> primes = generatePrimes(50000);
+    std::vector<int> primes;
+    if(m>50000)
+    primes = generatePrimes(50000);
+    else  {
+            int m_1 = m.get_ui();
+            primes = generatePrimes(m_1);
+          }  
 
     // Step 2: Exclude primes that divide 'n'
     std::vector<int> primes_filtered;
@@ -264,7 +271,7 @@ int main(int argc, char *argv[]) {
     }
 
     // Initialize GMP variable for 'n'
-    mpz_class mpz_n=n_len;
+     mpz_class mpz_n = mpz_class(n);
     
 
     std::cout << "Primes up to " << m << ":\n";
@@ -281,8 +288,7 @@ int main(int argc, char *argv[]) {
       int ls = legendreSymbol(mpz_n, p);
       std::cout << "Legendre symbol (" << n << "/" << p << ") = " << ls
                 << std::endl;
-      if (ls ==
-          1) { // Include in Factor Base if n is a quadratic residue modulo p
+      if (ls == 1) { // Include in Factor Base if n is a quadratic residue modulo p
         factor_base_primes.push_back(p);
         std::cout << p << " is a quadratic residue modulo " << p
                   << ". Included in Factor Base.\n"
@@ -293,7 +299,6 @@ int main(int argc, char *argv[]) {
                   << std::endl;
       }
     }
-
     // Step 4: Construct the Factor Base by adding -1
     factor_base.push_back(-1); // Always include -1
     for (const auto &p : factor_base_primes) {
@@ -360,41 +365,46 @@ int main(int argc, char *argv[]) {
   // Each process computes Q(x) for its assigned x's
   std::vector<mpz_class> local_Qx;
   std::vector<int> local_x;
-
+  std :: cout<<"world rank :"<<world_rank<<"local_x_start :"<<local_x_start<<"local_x_end"<<local_x_end;
   for (int x = local_x_start; x <= local_x_end; ++x) {
-    mpz_class Qx = compute_Qx(x, m, n);
+    mpz_class Qx;
+    compute_Qx(Qx,x, m, n);
+    std::cout<<"Qx : "<<Qx<<"  ,";
     local_Qx.push_back(Qx);
     local_x.push_back(x);
   }
-
+  MPI_Barrier(MPI_COMM_WORLD);  //Ensure all process calculate Qx for their respective class
   // Now, gather all Q(x) values to the root process
   // First, gather the counts from each process
-  int local_count = local_Qx.size();
+  std::size_t local_count = local_Qx.size();
   std::vector<int> recv_counts(world_size, 0);
 
   MPI_Gather(&local_count, 1, MPI_INT, recv_counts.data(), 1, MPI_INT, 0,
-             MPI_COMM_WORLD);
-
+             MPI_COMM_WORLD);        // send sixe of Qx
+  std::cout<<"\n\n";
   // Now, prepare for Gatherv
-  std::vector<int> displs;
-  std::vector<int> all_Qx;
-  std::vector<int> all_x;
+  std::vector<int> displs;      // It tells MPI where each process's data starts in the final collected array.
+  std::vector<int> all_Qx;      // will hold all corresponding all the gathered Q(x)
+  std::vector<int> all_x;       // will hold all corresponding x value
   if (world_rank == 0) {
     displs.resize(world_size, 0);
-    int total_recv = recv_counts[0];
+    int total_recv = recv_counts[0];       //received from the root process itself Q(x)
     for (int i = 1; i < world_size; ++i) {
       displs[i] = displs[i - 1] + recv_counts[i - 1];
+      std::cout<<" displs["<<i<<"] = "<<displs[i]<<recv_counts[i] <<" ";
       total_recv += recv_counts[i];
     }
+    
     all_Qx.resize(total_recv, 0); // Resize to hold all received Q(x)
     all_x.resize(total_recv, 0);  // Resize to hold all received x's
   }
 
   // Gather all Q(x) values
-  MPI_Gatherv(local_Qx.data(), local_count, MPI_INT, all_Qx.data(),
-              recv_counts.data(), displs.data(), MPI_INT, 0, MPI_COMM_WORLD);
+  MPI_Gatherv(local_Qx.data(), local_count, MPI_UNSIGNED_LONG, all_Qx.data(),
+              recv_counts.data(), displs.data(),MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
 
   // Gather all x values
+  //send_mpz_class_vector(local_Qx, 0, MPI_COMM_WORLD);
   MPI_Gatherv(local_x.data(), local_count, MPI_INT, all_x.data(),
               recv_counts.data(), displs.data(), MPI_INT, 0, MPI_COMM_WORLD);
 
