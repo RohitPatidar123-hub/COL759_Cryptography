@@ -211,8 +211,8 @@ int main(int argc, char *argv[]) {
     int root_process = 0;
 
     if (world_rank == root_process) {
-       // n.set_str("300000000000000000000000000000000000000000000000000000000000000000000000000003 ", 10); 
-       n.set_str("15 ", 10);                // Assign number to n
+       n.set_str("3000000000000000003", 10); 
+      // n.set_str("21", 10);                // Assign number to n
         m = sqrt(n) +1;                   // Compute square root of n
 
         n_str = n.get_str();           // Convert mpz_class to string
@@ -360,20 +360,21 @@ int main(int argc, char *argv[]) {
   }
 
   // Each process computes Q(x) for its assigned x's
-  std::vector<mpz_class> local_Qx;
+  std::vector<int> local_Qx;
   std::vector<int> local_x;
   std :: cout<<"world rank :"<<world_rank<<"local_x_start :"<<local_x_start<<"local_x_end"<<local_x_end;
   for (int x = local_x_start; x <= local_x_end; ++x) {
     mpz_class Qx;
     compute_Qx(Qx,x, m, n);
-    std::cout<<"Qx : "<<Qx<<"  ,";
-    local_Qx.push_back(Qx);
+    int Qx_int=Qx.get_si();
+    std::cout<<"Qx : "<<Qx_int<<"  ,";
+    local_Qx.push_back(Qx_int);
     local_x.push_back(x);
   }
   MPI_Barrier(MPI_COMM_WORLD);  //Ensure all process calculate Qx for their respective class
   // Now, gather all Q(x) values to the root process
   // First, gather the counts from each process
-  std::size_t local_count = local_Qx.size();
+  int  local_count = local_Qx.size();
   std::vector<int> recv_counts(world_size, 0);
 
   MPI_Gather(&local_count, 1,MPI_INT, recv_counts.data(), 1,MPI_INT, 0,
@@ -391,7 +392,7 @@ int main(int argc, char *argv[]) {
       std::cout<<" displs["<<i<<"] = "<<displs[i]<<recv_counts[i] <<" ";
       total_recv += recv_counts[i];
     }
-    
+    std::cout<<"\ntotal_recv : "<<total_recv<<"\n";
     all_Qx.resize(total_recv, 0); // Resize to hold all received Q(x)
     all_x.resize(total_recv, 0);  // Resize to hold all received x's
   }
@@ -422,7 +423,7 @@ int main(int argc, char *argv[]) {
     // Display the final Q(x) array
     std::cout << "Final Q(x) Array:\n";
     for (int x = x_min; x <= x_max; ++x) {
-      std::cout << "Q(" << x << ") = " << final_Qx[x]"yes or no " << std::endl;
+      std::cout << "Q(" << x << ") = " << final_Qx[x]<<" yes or no " << std::endl;
     }
     std::cout << "\n";
 
