@@ -7,21 +7,21 @@
 
 // Function to generate all prime numbers up to 'limit' using Sieve of
 // Eratosthenes
-std::vector<int> generatePrimes(int limit) {
+std::vector<unsigned long> generatePrimes(unsigned long limit) {
   std::vector<bool> is_prime(limit + 1, true);
   is_prime[0] = is_prime[1] = false;
 
-  int sqrt_limit = static_cast<int>(std::sqrt(limit));
-  for (int p = 2; p <= sqrt_limit; ++p) {
+  unsigned long sqrt_limit = static_cast<int>(std::sqrt(limit));
+  for (unsigned long p = 2; p <= sqrt_limit; ++p) {
     if (is_prime[p]) {
-      for (int multiple = p * p; multiple <= limit; multiple += p) {
+      for (unsigned long multiple = p * p; multiple <= limit; multiple += p) {
         is_prime[multiple] = false;
       }
     }
   }
 
-  std::vector<int> primes;
-  for (int p = 2; p <= limit; ++p) {
+  std::vector<unsigned long> primes;
+  for (unsigned long p = 2; p <= limit; ++p) {
     if (is_prime[p]) {
       primes.push_back(p);
     }
@@ -211,7 +211,8 @@ int main(int argc, char *argv[]) {
     int root_process = 0;
 
     if (world_rank == root_process) {
-        n.set_str("1001", 10);                // Assign number to n
+       // n.set_str("300000000000000000000000000000000000000000000000000000000000000000000000000003 ", 10); 
+       n.set_str("15 ", 10);                // Assign number to n
         m = sqrt(n) +1;                   // Compute square root of n
 
         n_str = n.get_str();           // Convert mpz_class to string
@@ -254,13 +255,9 @@ int main(int argc, char *argv[]) {
     std::cout << "Computed m (ceil(sqrt(n))): " << m << "\n" << std::endl;
 
     // Step 1: Generate primes up to 'm'
-    std::vector<int> primes;
-    if(m>50000)
-    primes = generatePrimes(50000);
-    else  {
-            int m_1 = m.get_ui();
-            primes = generatePrimes(m_1);
-          }  
+    std::vector<unsigned long> primes;
+    //unsigned long m_1 = m.get_ui();
+    primes = generatePrimes(100000);  
 
     // Step 2: Exclude primes that divide 'n'
     std::vector<int> primes_filtered;
@@ -379,7 +376,7 @@ int main(int argc, char *argv[]) {
   std::size_t local_count = local_Qx.size();
   std::vector<int> recv_counts(world_size, 0);
 
-  MPI_Gather(&local_count, 1, MPI_INT, recv_counts.data(), 1, MPI_INT, 0,
+  MPI_Gather(&local_count, 1,MPI_INT, recv_counts.data(), 1,MPI_INT, 0,
              MPI_COMM_WORLD);        // send sixe of Qx
   std::cout<<"\n\n";
   // Now, prepare for Gatherv
@@ -400,8 +397,8 @@ int main(int argc, char *argv[]) {
   }
 
   // Gather all Q(x) values
-  MPI_Gatherv(local_Qx.data(), local_count, MPI_UNSIGNED_LONG, all_Qx.data(),
-              recv_counts.data(), displs.data(),MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
+  MPI_Gatherv(local_Qx.data(), local_count, MPI_INT, all_Qx.data(),
+              recv_counts.data(), displs.data(),MPI_INT, 0, MPI_COMM_WORLD);
 
   // Gather all x values
   //send_mpz_class_vector(local_Qx, 0, MPI_COMM_WORLD);
@@ -425,7 +422,7 @@ int main(int argc, char *argv[]) {
     // Display the final Q(x) array
     std::cout << "Final Q(x) Array:\n";
     for (int x = x_min; x <= x_max; ++x) {
-      std::cout << "Q(" << x << ") = " << final_Qx[x] << std::endl;
+      std::cout << "Q(" << x << ") = " << final_Qx[x]"yes or no " << std::endl;
     }
     std::cout << "\n";
 
