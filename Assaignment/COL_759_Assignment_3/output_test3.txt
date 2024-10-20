@@ -1,5 +1,0 @@
-Quadratic Sieve (QS) Implementation
-===================================
-Target number (n): 247426586555061148132757227369
-Non-trivial factor found: 497419929792787
-Complementary factor: 497419929792787
