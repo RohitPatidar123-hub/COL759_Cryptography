@@ -211,7 +211,7 @@ int main(int argc, char *argv[]) {
     int root_process = 0;
 
     if (world_rank == root_process) {
-       n.set_str("3000000000000000003", 10); 
+       n.set_str(" 4989946", 10); 
       // n.set_str("21", 10);                // Assign number to n
         m = sqrt(n) +1;                   // Compute square root of n
 
@@ -257,7 +257,7 @@ int main(int argc, char *argv[]) {
     // Step 1: Generate primes up to 'm'
     std::vector<unsigned long> primes;
     //unsigned long m_1 = m.get_ui();
-    primes = generatePrimes(100000);  
+    primes = generatePrimes(1000);  
 
     // Step 2: Exclude primes that divide 'n'
     std::vector<int> primes_filtered;

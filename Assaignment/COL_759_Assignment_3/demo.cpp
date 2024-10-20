@@ -1,36 +1,47 @@
-#include <gmp.h>
-#include <stdio.h>
 #include <gmpxx.h>
-void foo(mpz_t result, const mpz_t param, unsigned long n) {
-    unsigned long i;
+#include <iostream>
+#include <mpi.h>
 
-    // Multiply param by n and store the result in "result"
-    mpz_mul_ui(result, param, n);
-
-    // Loop to perform additional operations on "result"
-    for (i = 1; i < n; i++) {
-        mpz_add_ui(result, result, i * 7);  // Add i*7 to the result
+int main(int argc, char* argv[]) {
+    MPI_Init(&argc, &argv);
+    
+    std::string n_str = ""; // Example input
+    mpz_class n(n_str);
+    
+    // Check if we are the root process
+    int world_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+    
+    if (world_rank == 0) {
+        mpz_class square;
+        mpz_sqrt(square.get_mpz_t(), n.get_mpz_t()); // Get the integer square root of n
+        
+        unsigned long int exponent = 2;
+        mpz_class result;
+        mpz_mul(square.get_mpz_t(), n.get_mpz_t(), n.get_mpz_t());
+        if (result == n) {
+            std::cout << "Non-trivial factor found: " << square << std::endl;
+            std::cout << "Complementary factor: " << square << std::endl;
+            MPI_Finalize();
+            return 0;
+        }
+    } else {
+        mpz_class square_root;
+        mpz_sqrt(square_root.get_mpz_t(), n.get_mpz_t()); // Get the integer square root of n
+        
+        unsigned long int exponent = 2;
+        mpz_class result;
+        mpz_pow_ui(result.get_mpz_t(), square_root.get_mpz_t(), exponent);
+        
+        if (result == n) {
+            // cout << "Non-trivial factor found: " << result << endl;
+            // cout << "Complementary factor: " << result << endl;
+            MPI_Finalize();
+            return 0;
+        }
     }
-}
-
-int main(void) {
-    mpz_t r, n;  // Declare GMP variables
-
-    // Initialize r (result) and n (input parameter)
-    mpz_init(r);
-    mpz_init_set_str(n, "1000000000000000000500023", 10);  // Initialize n with a string value
-
-    // Call foo function with r as the result, n as the input, and 20 as the multiplier
-    foo(r, n, 20L);
-    std::vector<long long> prime;
-    generate(n,prime);
-
-    // Print the result
-    gmp_printf("Result: %Zd\n", r);
-
-    // Clear the variables (free the memory)
-    mpz_clear(r);
-    mpz_clear(n);
-
+    
+    MPI_Finalize();
     return 0;
 }
+
